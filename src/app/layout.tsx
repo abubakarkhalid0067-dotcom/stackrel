@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import dynamic from "next/dynamic";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
@@ -6,10 +7,24 @@ import { Footer } from "@/components/layout/footer";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { CartProvider } from "@/components/providers/cart-provider";
-import { CartDrawer } from "@/components/cart/cart-drawer";
 import { LoadingScreen } from "@/components/providers/loading-screen";
-import { CustomCursor } from "@/components/effects/custom-cursor";
-import { PremiumEffects } from "@/components/effects/premium-effects";
+
+const CustomCursor = dynamic(
+  () =>
+    import("@/components/effects/custom-cursor").then((m) => m.CustomCursor),
+  { ssr: false }
+);
+
+const PremiumEffects = dynamic(
+  () =>
+    import("@/components/effects/premium-effects").then((m) => m.PremiumEffects),
+  { ssr: false }
+);
+
+const CartDrawer = dynamic(
+  () => import("@/components/cart/cart-drawer").then((m) => m.CartDrawer),
+  { ssr: false }
+);
 
 const inter = Inter({
   subsets: ["latin"],

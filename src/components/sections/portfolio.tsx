@@ -97,7 +97,7 @@ function PortfolioCard({
               src={project.image}
               alt={project.title}
               fill
-              unoptimized={project.image.startsWith("/")}
+              loading="lazy"
               className={cn(
                 "transition-transform duration-700 group-hover:scale-105",
                 project.image.startsWith("/services/")

@@ -47,7 +47,7 @@ function TemplateCard({
               src={template.image}
               alt={template.title}
               fill
-              unoptimized={template.image.startsWith("/")}
+              loading="lazy"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
               sizes="(max-width: 768px) 100vw, 33vw"
             />

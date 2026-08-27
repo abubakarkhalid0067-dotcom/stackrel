@@ -79,7 +79,7 @@ function PlayCircle({
         <audio
           ref={audioRef}
           src={audioSrc}
-          preload="metadata"
+          preload="none"
           onEnded={() => setIsPlaying(false)}
           className="hidden"
         />
@@ -94,7 +94,7 @@ function PlayCircle({
           src={src}
           alt={label}
           fill
-          unoptimized
+          loading="lazy"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="176px"
         />

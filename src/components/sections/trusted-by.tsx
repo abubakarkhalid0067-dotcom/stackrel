@@ -14,8 +14,8 @@ function LogoItem({ name, src }: { name: string; src?: string }) {
           alt={`${name} logo`}
           width={120}
           height={36}
+          loading="lazy"
           className="h-6 w-auto object-contain transition-opacity duration-300 hover:opacity-90 sm:h-7"
-          unoptimized
         />
       </div>
     );

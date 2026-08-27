@@ -85,7 +85,7 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
                   src={service.image!}
                   alt={service.title}
                   fill
-                  unoptimized
+                  loading="lazy"
                   className="object-contain object-center transition-transform duration-700 group-hover:scale-[1.02]"
                   sizes="(max-width: 768px) 100vw, 25vw"
                 />

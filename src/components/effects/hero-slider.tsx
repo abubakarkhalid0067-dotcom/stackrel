@@ -11,6 +11,9 @@ const FADE = { duration: 1.4, ease: [0.22, 1, 0.36, 1] as const };
 
 export function HeroSlider() {
   const [current, setCurrent] = useState(0);
+  const [loadedSlides, setLoadedSlides] = useState<Set<number>>(
+    () => new Set([0, 1])
+  );
 
   const goTo = useCallback((index: number) => {
     setCurrent(index);
@@ -25,38 +28,51 @@ export function HeroSlider() {
     return () => clearInterval(timer);
   }, [next]);
 
+  useEffect(() => {
+    setLoadedSlides((prev) => {
+      const nextIndex = (current + 1) % HERO_SLIDES.length;
+      if (prev.has(current) && prev.has(nextIndex)) return prev;
+      const updated = new Set(prev);
+      updated.add(current);
+      updated.add(nextIndex);
+      return updated;
+    });
+  }, [current]);
+
   return (
     <div className="absolute inset-0 overflow-hidden bg-black">
-      {/* All slides stacked — first image always in DOM & visible on load */}
-      {HERO_SLIDES.map((slide, i) => (
-        <motion.div
-          key={slide.src}
-          initial={false}
-          animate={{
-            opacity: i === current ? 1 : 0,
-            scale: i === current ? 1 : 1.04,
-          }}
-          transition={FADE}
-          className="absolute inset-0"
-          aria-hidden={i !== current}
-        >
-          <Image
-            src={slide.src}
-            alt={slide.alt}
-            fill
-            priority={i === 0}
-            unoptimized
-            className="object-cover"
-            sizes="100vw"
-          />
-        </motion.div>
-      ))}
+      {HERO_SLIDES.map((slide, i) => {
+        if (!loadedSlides.has(i)) return null;
 
-      {/* Cinematic overlay */}
+        return (
+          <motion.div
+            key={slide.src}
+            initial={false}
+            animate={{
+              opacity: i === current ? 1 : 0,
+              scale: i === current ? 1 : 1.04,
+            }}
+            transition={FADE}
+            className="absolute inset-0"
+            aria-hidden={i !== current}
+          >
+            <Image
+              src={slide.src}
+              alt={slide.alt}
+              fill
+              priority={i === 0}
+              loading={i === 0 ? undefined : "lazy"}
+              className="object-cover"
+              sizes="100vw"
+              quality={i === 0 ? 85 : 75}
+            />
+          </motion.div>
+        );
+      })}
+
       <div className="absolute inset-0 bg-black/15" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-black/35" />
 
-      {/* Slide dots */}
       <div className="absolute bottom-[clamp(1.25rem,3vh,2rem)] left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 opacity-60">
         {HERO_SLIDES.map((slide, i) => (
           <button
