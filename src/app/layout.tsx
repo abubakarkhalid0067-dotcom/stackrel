@@ -1,30 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import dynamic from "next/dynamic";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import {
+  DeferredCartDrawer,
+  DeferredEffects,
+} from "@/components/layout/deferred-client-ui";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { CartProvider } from "@/components/providers/cart-provider";
 import { LoadingScreen } from "@/components/providers/loading-screen";
-
-const CustomCursor = dynamic(
-  () =>
-    import("@/components/effects/custom-cursor").then((m) => m.CustomCursor),
-  { ssr: false }
-);
-
-const PremiumEffects = dynamic(
-  () =>
-    import("@/components/effects/premium-effects").then((m) => m.PremiumEffects),
-  { ssr: false }
-);
-
-const CartDrawer = dynamic(
-  () => import("@/components/cart/cart-drawer").then((m) => m.CartDrawer),
-  { ssr: false }
-);
 
 const inter = Inter({
   subsets: ["latin"],
@@ -134,8 +120,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col antialiased">
         <LoadingScreen />
-        <CustomCursor />
-        <PremiumEffects />
+        <DeferredEffects />
         <div className="noise-overlay" aria-hidden="true" />
         <SmoothScrollProvider>
           <AuthProvider>
@@ -143,7 +128,7 @@ export default function RootLayout({
               <Navbar />
               <main className="flex-1">{children}</main>
               <Footer />
-              <CartDrawer />
+              <DeferredCartDrawer />
             </CartProvider>
           </AuthProvider>
         </SmoothScrollProvider>
